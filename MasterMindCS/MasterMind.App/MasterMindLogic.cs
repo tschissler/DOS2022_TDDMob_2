@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MasterMind.App
 {
@@ -19,9 +20,39 @@ namespace MasterMind.App
             return code;
         }
 
-        public static string GetGuessFeedback(string code, string input)
+        public static string GetGuessFeedback(string code, string guess)
         {
-            throw new NotImplementedException("The logic for getting feedback for a guess is not implemented. Try to apply TDD practices to implement it.");
+            string result = "";
+
+            string remainingGuess = "";
+            string remainingCode = "";
+
+            for (int i = 0; i < 4; i++)
+            {
+                char currentGuess = guess[i];
+                if (code[i] == currentGuess)
+                {
+                    result += "P";
+                }
+                else
+                {
+                    remainingGuess += currentGuess;
+                    remainingCode += code[i];
+                }
+            }
+
+            for (int i = 0; i < remainingGuess.Length; i++)
+            {
+                if (remainingCode.Contains(remainingGuess[i]))
+                {
+                    result += "C";
+
+                    remainingCode = remainingCode
+                        .Remove(remainingCode.IndexOf(remainingGuess[i]), 1);
+                }
+            }
+
+            return result;
         }
     }
 }
